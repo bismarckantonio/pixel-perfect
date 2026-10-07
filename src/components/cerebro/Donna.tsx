@@ -11,7 +11,7 @@ const suggestions = [
 
 type Msg = { from: "me" | "donna"; text: string };
 
-export function Donna() {
+export function Donna({ compact = false }: { compact?: boolean }) {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const [msgs, setMsgs] = useState<Msg[]>([]);
@@ -35,10 +35,16 @@ export function Donna() {
       <button
         onClick={() => setOpen((o) => !o)}
         aria-label="Abrir Donna"
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-3 rounded-full glass py-2 pl-2 pr-5 transition hover:scale-[1.02]"
+        className={
+          compact
+            ? "flex items-center"
+            : "fixed bottom-6 right-6 z-40 flex items-center gap-3 rounded-full glass py-2 pl-2 pr-5 transition hover:scale-[1.02]"
+        }
       >
         <span className="h-10 w-10 rounded-full bg-orb animate-orb" />
-        <span className="font-display text-sm font-semibold tracking-wide">DONNA</span>
+        {!compact && (
+          <span className="font-display text-sm font-semibold tracking-wide">DONNA</span>
+        )}
       </button>
 
       {open && (
@@ -51,7 +57,11 @@ export function Donna() {
                 <p className="label-os">asistente del sistema</p>
               </div>
             </div>
-            <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground" aria-label="Cerrar">
+            <button
+              onClick={() => setOpen(false)}
+              className="text-muted-foreground hover:text-foreground"
+              aria-label="Cerrar"
+            >
               <X className="h-4 w-4" />
             </button>
           </div>
@@ -61,14 +71,25 @@ export function Donna() {
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground">¿En qué te ayudo?</p>
                 {suggestions.map((q) => (
-                  <button key={q} onClick={() => send(q)} className="block w-full rounded-xl border px-3 py-2 text-left text-sm hover:bg-accent">
+                  <button
+                    key={q}
+                    onClick={() => send(q)}
+                    className="block w-full rounded-xl border px-3 py-2 text-left text-sm hover:bg-accent"
+                  >
                     {q}
                   </button>
                 ))}
               </div>
             ) : (
               msgs.map((m, i) => (
-                <div key={i} className={m.from === "me" ? "ml-auto max-w-[85%] rounded-2xl bg-primary px-3 py-2 text-sm text-primary-foreground" : "max-w-[90%] text-sm leading-relaxed"}>
+                <div
+                  key={i}
+                  className={
+                    m.from === "me"
+                      ? "ml-auto max-w-[85%] rounded-2xl bg-primary px-3 py-2 text-sm text-primary-foreground"
+                      : "max-w-[90%] text-sm leading-relaxed"
+                  }
+                >
                   {m.text}
                 </div>
               ))
@@ -76,10 +97,15 @@ export function Donna() {
           </div>
 
           <form
-            onSubmit={(e) => { e.preventDefault(); send(text); }}
+            onSubmit={(e) => {
+              e.preventDefault();
+              send(text);
+            }}
             className="mt-3 flex items-center gap-2 rounded-2xl border bg-background/40 p-2"
           >
-            <button type="button" className="p-2 text-muted-foreground" aria-label="Hablar"><Mic className="h-4 w-4" /></button>
+            <button type="button" className="p-2 text-muted-foreground" aria-label="Hablar">
+              <Mic className="h-4 w-4" />
+            </button>
             <input
               autoFocus
               value={text}
@@ -87,7 +113,12 @@ export function Donna() {
               placeholder="Habla con Donna…"
               className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
             />
-            <button className="rounded-xl bg-primary p-2 text-primary-foreground" aria-label="Enviar"><ArrowUp className="h-4 w-4" /></button>
+            <button
+              className="rounded-xl bg-primary p-2 text-primary-foreground"
+              aria-label="Enviar"
+            >
+              <ArrowUp className="h-4 w-4" />
+            </button>
           </form>
         </div>
       )}

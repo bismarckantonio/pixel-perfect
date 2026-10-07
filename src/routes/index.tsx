@@ -10,7 +10,7 @@ export const Route = createFileRoute("/")({
 });
 
 function useNow() {
-  const [now, setNow] = useState<Date | null>(null);
+  const [now, setNow] = useState(() => new Date());
   useEffect(() => { setNow(new Date()); const timer = setInterval(() => setNow(new Date()), 15000); return () => clearInterval(timer); }, []);
   return now;
 }
@@ -38,7 +38,7 @@ function Home() {
   const date = now?.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" }) ?? "";
 
   return (
-    <main className="min-h-dvh px-4 pb-32 pt-4 sm:px-6 lg:px-10">
+    <main className="min-h-dvh px-4 pb-40 pt-4 sm:px-6 lg:px-10">
       <header className="mx-auto flex max-w-[1180px] items-center justify-between gap-4 border-b border-white/10 pb-4">
         <div className="flex items-center gap-3">
           <div className="brand-mark">C</div>
@@ -71,7 +71,6 @@ function Home() {
       </div>
 
       <nav className="dock" aria-label="Navegación principal"><div className="flex items-center gap-1 sm:gap-2">{navigation.slice(0, 2).map(({ label, icon: Icon, active }) => <button key={label} className={`dock-item ${active ? "dock-active" : ""}`}><Icon className="h-4 w-4" /><span>{label}</span></button>)}<button className="dock-donna" aria-label="Abrir Donna"><span className="h-8 w-8 rounded-full bg-orb animate-orb" /></button>{navigation.slice(2).map(({ label, icon: Icon }) => <button key={label} className="dock-item"><Icon className="h-4 w-4" /><span>{label}</span></button>)}<button className="dock-item hidden sm:flex"><Library className="h-4 w-4" /><span>Biblioteca</span></button><button className="dock-item hidden sm:flex"><Server className="h-4 w-4" /><span>Sistema</span></button></div></nav>
-      <Donna />
     </main>
   );
 }

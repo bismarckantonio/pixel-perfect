@@ -10,7 +10,7 @@ export const Route = createFileRoute("/")({
 });
 
 function useNow() {
-  const [now, setNow] = useState(() => new Date());
+  const [now, setNow] = useState<Date | null>(null);
   useEffect(() => { setNow(new Date()); const timer = setInterval(() => setNow(new Date()), 15000); return () => clearInterval(timer); }, []);
   return now;
 }
